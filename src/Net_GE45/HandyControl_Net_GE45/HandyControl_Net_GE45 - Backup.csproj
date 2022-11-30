@@ -4,7 +4,7 @@
     <RootNamespace>HandyControl</RootNamespace>
     <TargetFrameworks>netcoreapp3.0;netcoreapp3.1;net46;net461;net472;net48;net5.0-windows;net6.0-windows;</TargetFrameworks>
     <Description>Contains some simple and commonly used WPF controls</Description>
-    <PackageId>MHandyControl</PackageId>
+    <PackageId>HandyControl</PackageId>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <NoWarn>0067;0649;1591;MSB3061;SYSLIB0003;SYSLIB0004</NoWarn>
     <MSBuildWarningsAsMessages>NETSDK1138</MSBuildWarningsAsMessages>
