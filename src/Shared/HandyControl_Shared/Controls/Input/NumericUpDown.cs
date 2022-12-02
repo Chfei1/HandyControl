@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -67,8 +68,18 @@ public class NumericUpDown : Control
 
             _textBox.PreviewKeyDown += TextBox_PreviewKeyDown;
             _textBox.TextChanged += TextBox_TextChanged;
+            _textBox.PreviewTextInput += _textBox_PreviewTextInput;
             _textBox.LostFocus += TextBox_LostFocus;
             _textBox.Text = CurrentText;
+        }
+    }
+
+    private void _textBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = new Regex("[^0-9|\\.]").IsMatch(e.Text);
+        if(e.Text == ".")
+        {
+           e.Handled =  _textBox.Text.Contains(e.Text);
         }
     }
 
@@ -86,11 +97,20 @@ public class NumericUpDown : Control
 
     private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
+        
         if (double.TryParse(_textBox.Text, out double value))
         {
             if (value >= Minimum && value <= Maximum)
             {
-                SetCurrentValue(ValueProperty, value);
+                if (_textBox.Text.EndsWith("."))
+                {
+                    //SetCurrentValue(ValueProperty, value + ".");
+                }
+                else
+                {
+                    SetCurrentValue(ValueProperty, value);
+                }
+                
             }
         }
     }
