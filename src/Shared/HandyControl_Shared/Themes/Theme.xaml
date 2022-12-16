@@ -11387,6 +11387,7 @@
 	</ControlTemplate>
 	<Style x:Key="TabControlPlusBaseStyle" TargetType="hc:TabControl">
 		<Setter Property="Padding" Value="0" />
+		<Setter Property="TabStripPlacement" Value="Bottom" />
 		<Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
 		<Setter Property="HorizontalContentAlignment" Value="Center" />
