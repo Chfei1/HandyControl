@@ -85,8 +85,13 @@ public class NumericUpDown : Control
         {
             SetCurrentValue(ValueProperty, value);
         }
+        else
+        {
+            SetCurrentValue(ValueProperty, Value);
+        }
     }
 
+    private static readonly char[] validChars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '.' };
     private static readonly Regex _regex = new("[^0-9.-]+"); //regex that matches disallowed text
     private static bool IsTextAllowed(string wholeText, string newText, bool onlyInteger = false)
     {
@@ -151,6 +156,7 @@ public class NumericUpDown : Control
         //{
         //    SetCurrentValue(ValueProperty, ValueBoxes.Double0Box);
         //}
+
     }
 
     protected virtual void DataObjectPasting(object sender, DataObjectPastingEventArgs e)
@@ -171,6 +177,11 @@ public class NumericUpDown : Control
 
     private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
     {
+        if (e.Key == Key.Space)
+        {
+            e.Handled = true;
+        }
+
         if (IsReadOnly) return;
 
         if (e.Key == Key.Up)
