@@ -96,7 +96,7 @@ public class NumericUpDown : Control
     private static bool IsTextAllowed(string wholeText, string newText, bool onlyInteger = false)
     {
         wholeText += newText;
-        //if (wholeText.Length >= 25)
+        //if (wholeText.Length >= MaximumLengthProperty)
         //{
         //    return false;
         //}
@@ -122,35 +122,39 @@ public class NumericUpDown : Control
 
     private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        //if (double.TryParse(_textBox.Text, out double value))
-        //{
-        //    if (value >= Minimum && value <= Maximum && _textBox.Text.Length < MaximumLength)
-        //    {
-        //        string text = _textBox.Text;
-        //        if (text.Contains("."))
-        //        {
-        //            if (text.EndsWith("."))
-        //            {
+        if (double.TryParse(_textBox.Text, out double value))
+        {
+            if (value >= Minimum && value <= Maximum && _textBox.Text.Length < MaximumLength)
+            {
+                string text = _textBox.Text;
+                if (text.Contains("."))
+                {
+                    if (text.EndsWith("."))
+                    {
 
-        //            }
-        //            else
-        //            {
-        //                if (text.EndsWith("0"))
-        //                {
+                    }
+                    else
+                    {
+                        if (text.EndsWith("0"))
+                        {
 
-        //                }
-        //                else
-        //                {
-        //                    SetCurrentValue(ValueProperty, value);
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            SetCurrentValue(ValueProperty, value);
-        //        }
-        //    }
-        //}
+                        }
+                        else
+                        {
+                            SetCurrentValue(ValueProperty, value);
+                        }
+                    }
+                }
+                else if (text.Length != 1 && text.StartsWith("0"))
+                {
+
+                }
+                else
+                {
+                    SetCurrentValue(ValueProperty, value);
+                }
+            }
+        }
 
         //if (string.IsNullOrWhiteSpace(_textBox.Text))
         //{
@@ -205,13 +209,46 @@ public class NumericUpDown : Control
         }
     }
 
-    private string CurrentText => string.IsNullOrWhiteSpace(ValueFormat)
-        ? DecimalPlaces.HasValue
-            ? Value.ToString($"#0.{new string('0', DecimalPlaces.Value)}")
-            : Value.ToString()
-        : Value.ToString(ValueFormat);
+    private string CurrentText
+    {
+        get
+        {
+            if (double.TryParse(_textBox.Text, out double number))
+            {
+                return _textBox.Text;
+            }
+            else
+            {
+                if (DecimalPlaces.HasValue)
+                {
+                    if (string.IsNullOrWhiteSpace(ValueFormat))
+                    {
+                        return Value.ToString($"#0.{new string('0', DecimalPlaces.Value)}");
+                    }
+                    else
+                    {
+                        return Value.ToString(ValueFormat);
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(ValueFormat))
+                    {
+                        return Value.ToString();
+                    }
+                    else
+                    {
+                        return Value.ToString(ValueFormat);
+                    }
+                }
+            }
+        }
+    }
 
-    protected virtual void OnValueChanged(FunctionEventArgs<double> e) => RaiseEvent(e);
+    protected virtual void OnValueChanged(FunctionEventArgs<double> e)
+    {
+        RaiseEvent(e);
+    }
 
     /// <summary>
     ///     值改变事件
