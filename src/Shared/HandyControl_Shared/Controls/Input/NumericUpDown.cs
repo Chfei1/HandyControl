@@ -89,6 +89,20 @@ public class NumericUpDown : Control
         {
             SetCurrentValue(ValueProperty, Value);
         }
+        if (_textBox != null)
+        {
+            string after = CurrentText.Trim('0');
+            if (after.Length == 0)
+            {
+                after = "0";
+            }
+            else if (after.StartsWith("."))
+            {
+                after = "0" + after;
+            }
+            _textBox.Text = after;
+            _textBox.Select(_textBox.Text.Length, 0);
+        }
     }
 
     private static readonly char[] validChars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '.' };
