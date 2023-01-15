@@ -215,7 +215,14 @@ public class NumericUpDown : Control
         {
             if (double.TryParse(_textBox.Text, out double number))
             {
-                return _textBox.Text;
+                if (DecimalPlaces.HasValue)
+                {
+                    return Value.ToString($"#0.{new string('0', DecimalPlaces.Value)}");
+                }
+                else
+                {
+                    return _textBox.Text;
+                }
             }
             else
             {
