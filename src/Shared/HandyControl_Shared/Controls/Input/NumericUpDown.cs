@@ -22,6 +22,8 @@ public class NumericUpDown : Control
 
     private TextBox _textBox;
 
+    public const string DoubleFixedPoint = "0.###################################################################################################################################################################################################################################################################################################################################################";
+
     public NumericUpDown()
     {
         CommandBindings.Add(new CommandBinding(ControlCommands.Prev, (s, e) =>
@@ -89,9 +91,14 @@ public class NumericUpDown : Control
         {
             SetCurrentValue(ValueProperty, Value);
         }
+        UpdateText();
+    }
+
+    private void UpdateText()
+    {
         if (_textBox != null)
         {
-            string after = CurrentText.Trim('0');
+            string after = CurrentText.TrimStart('0');
             if (after.Length == 0)
             {
                 after = "0";
@@ -99,6 +106,10 @@ public class NumericUpDown : Control
             else if (after.StartsWith("."))
             {
                 after = "0" + after;
+            }
+            else if (after.Contains("."))
+            {
+                after = after.TrimEnd('0');
             }
             _textBox.Text = after;
             _textBox.Select(_textBox.Text.Length, 0);
@@ -168,6 +179,10 @@ public class NumericUpDown : Control
                     SetCurrentValue(ValueProperty, value);
                 }
             }
+            else
+            {
+                SetCurrentValue(ValueProperty, Value);//assign current value to update it
+            }
         }
 
         //if (string.IsNullOrWhiteSpace(_textBox.Text))
@@ -229,13 +244,27 @@ public class NumericUpDown : Control
         {
             if (double.TryParse(_textBox.Text, out double number))
             {
-                if (DecimalPlaces.HasValue)
+                if (number >= Minimum && number <= Maximum)
                 {
-                    return Value.ToString($"#0.{new string('0', DecimalPlaces.Value)}");
+                    if (DecimalPlaces.HasValue)
+                    {
+                        return Value.ToString($"#0.{new string('0', DecimalPlaces.Value)}");
+                    }
+                    else
+                    {
+                        return _textBox.Text;
+                    }
                 }
                 else
                 {
-                    return _textBox.Text;
+                    if (number < Minimum)
+                    {
+                        return Minimum.ToString();
+                    }
+                    else
+                    {
+                        return Maximum.ToString();
+                    }
                 }
             }
             else
@@ -261,6 +290,35 @@ public class NumericUpDown : Control
                     {
                         return Value.ToString(ValueFormat);
                     }
+                }
+            }
+        }
+    }
+
+    private string CurrentTextByValue
+    {
+        get
+        {
+            if (DecimalPlaces.HasValue)
+            {
+                if (string.IsNullOrWhiteSpace(ValueFormat))
+                {
+                    return Value.ToString($"#0.{new string('0', DecimalPlaces.Value)}");
+                }
+                else
+                {
+                    return Value.ToString(ValueFormat);
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(ValueFormat))
+                {
+                    return Value.ToString(DoubleFixedPoint);
+                }
+                else
+                {
+                    return Value.ToString(ValueFormat);
                 }
             }
         }
@@ -299,7 +357,7 @@ public class NumericUpDown : Control
     {
         var ctl = (NumericUpDown) d;
         var v = (double) e.NewValue;
-        ctl.SetText();
+        ctl.SetTextByValue();
 
         ctl.OnValueChanged(new FunctionEventArgs<double>(ValueChangedEvent, ctl)
         {
@@ -312,6 +370,15 @@ public class NumericUpDown : Control
         if (_textBox != null)
         {
             _textBox.Text = CurrentText;
+            _textBox.Select(_textBox.Text.Length, 0);
+        }
+    }
+
+    private void SetTextByValue()
+    {
+        if (_textBox != null)
+        {
+            _textBox.Text = CurrentTextByValue;
             _textBox.Select(_textBox.Text.Length, 0);
         }
     }
@@ -331,7 +398,7 @@ public class NumericUpDown : Control
         {
             ctl.Value = maximum;
         }
-        ctl.SetText();
+        ctl.SetTextByValue();
         return num > maximum ? maximum : num;
     }
 
