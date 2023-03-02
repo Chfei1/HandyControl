@@ -9,6 +9,11 @@ public class MessageBoxInfo
 
     public string Caption { get; set; }
 
+    public string YesText { get; set; }
+    public string NoText { get; set; }
+    public string ConfirmText { get; set; }
+    public string CancelText { get; set; }
+
     public MessageBoxButton Button { get; set; } = MessageBoxButton.OK;
 
     public Geometry Icon { get; set; }

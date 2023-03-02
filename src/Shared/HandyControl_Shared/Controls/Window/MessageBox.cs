@@ -370,7 +370,7 @@ public sealed class MessageBox : Window
         Application.Current.Dispatcher.Invoke(new Action(() =>
         {
             messageBox = CreateMessageBox(null, info.Message, info.Caption, info.Button, MessageBoxImage.None, info.DefaultResult);
-            SetButtonStatus(messageBox, info.Button, info.DefaultResult);
+            SetButtonStatus(messageBox, info.Button, info.DefaultResult, info.YesText, info.NoText, info.ConfirmText, info.CancelText);
 
             if (!string.IsNullOrEmpty(info.IconKey))
             {
@@ -467,6 +467,11 @@ public sealed class MessageBox : Window
 
     private static void SetButtonStatus(MessageBox messageBox, MessageBoxButton messageBoxButton, MessageBoxResult defaultResult)
     {
+        SetButtonStatus(messageBox, messageBoxButton, defaultResult, null, null, null, null);
+    }
+
+    private static void SetButtonStatus(MessageBox messageBox, MessageBoxButton messageBoxButton, MessageBoxResult defaultResult, string yesText, string noText, string confirmText, string cancelText)
+    {
         switch (messageBoxButton)
         {
             case MessageBoxButton.OK:
@@ -476,7 +481,7 @@ public sealed class MessageBox : Window
                 {
                     IsCancel = true,
                     IsDefault = true,
-                    Content = Lang.Confirm,
+                    Content = string.IsNullOrWhiteSpace(confirmText) ? Lang.Confirm : confirmText,
                     Command = ControlCommands.Confirm,
                     Style = ResourceHelper.GetResourceInternal<Style>("MessageBoxButtonStyle")
                 };
@@ -487,7 +492,7 @@ public sealed class MessageBox : Window
                 messageBox._showOk = true;
                 messageBox._buttonOk = new Button
                 {
-                    Content = Lang.Confirm,
+                    Content = string.IsNullOrWhiteSpace(confirmText) ? Lang.Confirm : confirmText,
                     Command = ControlCommands.Confirm
                 };
 
@@ -495,7 +500,7 @@ public sealed class MessageBox : Window
                 messageBox._buttonCancel = new Button
                 {
                     IsCancel = true,
-                    Content = Lang.Cancel,
+                    Content = string.IsNullOrWhiteSpace(cancelText) ? Lang.Cancel : cancelText,
                     Command = ControlCommands.Cancel
                 };
 
@@ -518,14 +523,14 @@ public sealed class MessageBox : Window
                 messageBox._showYes = true;
                 messageBox._buttonYes = new Button
                 {
-                    Content = Lang.Yes,
+                    Content = string.IsNullOrWhiteSpace(yesText) ? Lang.Yes : yesText,
                     Command = ControlCommands.Yes
                 };
 
                 messageBox._showNo = true;
                 messageBox._buttonNo = new Button
                 {
-                    Content = Lang.No,
+                    Content = string.IsNullOrWhiteSpace(noText) ? Lang.No : noText,
                     Command = ControlCommands.No
                 };
 
@@ -548,14 +553,14 @@ public sealed class MessageBox : Window
                 messageBox._showYes = true;
                 messageBox._buttonYes = new Button
                 {
-                    Content = Lang.Yes,
+                    Content = string.IsNullOrWhiteSpace(yesText) ? Lang.Yes : yesText,
                     Command = ControlCommands.Yes
                 };
 
                 messageBox._showNo = true;
                 messageBox._buttonNo = new Button
                 {
-                    Content = Lang.No,
+                    Content = string.IsNullOrWhiteSpace(noText) ? Lang.No : noText,
                     Command = ControlCommands.No
                 };
 
@@ -563,7 +568,7 @@ public sealed class MessageBox : Window
                 messageBox._buttonCancel = new Button
                 {
                     IsCancel = true,
-                    Content = Lang.Cancel,
+                    Content = string.IsNullOrWhiteSpace(cancelText) ? Lang.Cancel : cancelText,
                     Command = ControlCommands.Cancel
                 };
 
