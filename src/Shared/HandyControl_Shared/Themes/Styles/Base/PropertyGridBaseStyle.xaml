@@ -39,19 +39,19 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <ContentPresenter x:Name="Presenter" Margin="0,0,0,10"/>
-                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <ContentPresenter x:Name="Presenter" Margin="0,0,0,0"/>
+                            <!--<StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <TextBlock FontWeight="Bold" Text="{Binding PropertyTypeName,RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}"/>
                                 <TextBlock Text="{Binding PropertyName,RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}" Margin="6,0,0,0"/>
-                            </StackPanel>
+                            </StackPanel>-->
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Content" Value="{x:Null}">
-                            <Setter TargetName="Presenter" Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                         <Trigger Property="Content" Value="">
-                            <Setter TargetName="Presenter" Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -69,7 +69,7 @@
                         <GroupBox.Header>
                             <TextBlock Padding="0,0,10,0" Width="{Binding Path=(hc:TitleElement.TitleWidth).Value,RelativeSource={RelativeSource TemplatedParent}}" Text="{TemplateBinding DisplayName}" TextTrimming="CharacterEllipsis">
                                 <TextBlock.ToolTip>
-                                    <ToolTip Style="{StaticResource PropertyItemToolTipBaseStyle}" Content="{TemplateBinding Description}"/>
+                                    <ToolTip Style="{StaticResource PropertyItemToolTipBaseStyle}" Content="{TemplateBinding Description}" />
                                 </TextBlock.ToolTip>
                             </TextBlock>
                         </GroupBox.Header>
