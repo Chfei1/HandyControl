@@ -149,6 +149,10 @@ public class TabPanel : Panel
                 };
                 tabItem.Arrange(rect);
                 tabItem.ItemWidth = itemWidth - tabItem.BorderThickness.Left;
+                if (tabItem.Visibility == Visibility.Collapsed)
+                {
+                    tabItem.ItemWidth = 0;
+                }
                 tabItem.CurrentIndex = index;
                 tabItem.TargetOffsetX = 0;
                 ItemDic[index] = tabItem;
